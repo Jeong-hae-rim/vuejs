@@ -150,3 +150,104 @@ Vue.js는 UI 화면 개발 방법 중 하나인 MVVM 패턴의 뷰 모델에 해
 
 ### 2. 개발환경 설정 및 첫 번째 프로젝트
 
+#### 2-1. 뷰 학습을 위한 개발 환경 설정
+
+| 설치해야 할 도구                                             |
+| ------------------------------------------------------------ |
+| 크롬 브라우저<br />아톰(Atom) 텍스트 에디터 <br />노드제이에스(Node.js)<br />뷰 개발자 도구(Vue.js devtools, 크롬 확장 플러그인) |
+
+##### 아톰(Atom) 텍스트 에디터 
+
+- 개인적인 감상평 : Visual Studio와 비슷한 형태인 거 같은데 처음에는 조금 다루기 어려웠다. 교재가 없었다면 아마 좀 헤맸을 것 같다.
+
+- 아톰 테마 : Seti-ui, atom-material-syntax-dark
+
+  - 테마 설치 방법 : File - Settings - Install - Themes
+
+  - 테마 적용 : Settings - Themes - UI Theme / Syntax Theme
+
+- 아톰 패키지 : Settings - Install - Packages - language-vue
+
+##### 노드제이에스
+
+- 서버 사이드 자바스크립트.
+- 서버 측에서 실행되는 자바스크립트 실행 환경
+- 초창기 자바스크립트는 웹 화면의 간단한 작업을 처리하기 위한 용도로 사용되었으나 노드제이에스 덕분에 자바스크립트는 웹 뿐 아니라 서버 사이드, 사물 인터넷, 로봇 제어에도 활용되는 기반을 갖추게 되었음
+- 설치 시 (버전)LTS
+- cmd -> node -v 로 커맨드 입력 시 정상적으로 설치되었으면 노드제이에스의 버전이 뜸
+
+##### 뷰 개발자 도구
+
+- 뷰로 개발할 때 도움을 주는 도구
+- 뷰로 만든 웹 앱의 구조를 간편하게 디버깅하거나 분석할 수 있음
+- 검색 후 chrome web store로 들어가 팝업 페이지 상단 위쪽에 있는 크롬에 추가 버튼 클릭 - 설치 여부를 묻는 팝업 창 - 확장 프로그램 추가 버튼 누름
+
+
+
+#### 2-2 프로젝트 만들기
+
+##### 뷰 시작하기
+
+HTML 파일 생성 - 뷰 소스 코드 추가 - 브라우저로 실행
+
+```vue
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Vue Sample</title>
+  </head>
+  <body>
+    <div id="app">
+      {{ message }}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el : '#app',
+        data: {
+          message: 'Hello Vue.js!'
+        }
+      });
+    </script>
+  </body>
+</html>
+
+```
+
+[^코드 1]: 실습 예제 1
+
+
+
+- 이 실습 예제에서 중요한 것은 HTML 문서에서 코드 몇 줄로 뷰를 바로 실행할 수 있다는 점. (나는 아직 잘 모르겠다...)
+
+- 크롬 브라우저를 열어 파일에 접근한 뒤 크롬 개발자 도구로 확인하면 로그가 두 개 뜬다.
+
+  ![image7](./images/image6.png)
+
+  - 첫 번째 로그 해결 방법
+
+    ![image7](./images/image7.png)
+
+    ![image8](./images/image8.png)
+
+  - 두 번째 로그 확인 방법
+
+    - 개발자 도구를 열고 Vue 탭을 연다.
+
+    - 그 뒤 '<Root>==$vm0'을 클릭하면 다음과 같은 화면이 뜬다.
+
+    ![image9](./images/image9.png)
+
+    - 왼쪽의 텍스트가 강조되면서 오른쪽에 루트 컴포넌트에 대한 상세 내용이 표시된다.
+      - 루트 컴포넌트 :  뷰 애플리케이션을 실행할 때 가장 근간이 되는 컴포넌트이자 최상위 컴포넌트를 의미
+
+    - 그 외에 Vuex, Events, Refresh 탭을 선택해 해당 기능에 대한 상태를 쉽게 확인할 수 있다.
+    - 결론적으로 화면에 표시된 텍스트는 최상위 컴포넌트의 data 속성인 message의 값인 것이다.
+
+    
+
+    
+
+    
+
