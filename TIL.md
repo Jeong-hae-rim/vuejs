@@ -12,7 +12,7 @@
 
 - 화면단 라이브러리이자 프레임 워크
 
-![image1](images/image1.png)
+![image1](./images/image1.png)
 
 [^그림1]: 점진적인 프레임워크로서의 뷰의 의미
 
@@ -64,7 +64,7 @@ Vue.js는 UI 화면 개발 방법 중 하나인 MVVM 패턴의 뷰 모델에 해
 
 
 
-![image2](images/image2.png)
+![image2](./images/image2.png)
 
 ##### MVVM패턴 
 
@@ -87,7 +87,7 @@ Vue.js는 UI 화면 개발 방법 중 하나인 MVVM 패턴의 뷰 모델에 해
 
 ##### MVVM 구조의 처리 흐름
 
-![image4](images/image3.png)
+![image3](./images/image3.png)
 
 [^그림3 ]: 구글 화면단
 
@@ -99,7 +99,7 @@ Vue.js는 UI 화면 개발 방법 중 하나인 MVVM 패턴의 뷰 모델에 해
 
 
 
-![image5](images/image4.png)
+![image4](./images/image4.png)
 
 [^그림 4]: 검색 화면단
 
@@ -117,7 +117,7 @@ Vue.js는 UI 화면 개발 방법 중 하나인 MVVM 패턴의 뷰 모델에 해
 
 ##### 컴포넌트 기반 프레임 워크
 
-![image6](images/image5.png)
+![image5](./images/image5.png)
 
 컴포넌트 
 
