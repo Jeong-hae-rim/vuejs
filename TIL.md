@@ -306,4 +306,263 @@ HTML 파일 생성 - 뷰 소스 코드 추가 - 브라우저로 실행
 
     여기서 사용한 # 선택자는 CSS 선택자 규칙과 같다.
 
-    
+- 이 외에도 templete, methods, created 등 미리 정의되어 있는 속성을 사용할 수 있음.
+
+  | 속성      | 설명                                                         |
+  | --------- | ------------------------------------------------------------ |
+  | templeste | 화면에 표시할 HTML, CSS 등의 마크업 요소를 정의하는 속성.<br />뷰의 데이터 및 기타 속성들도 함께 화면에 그릴 수 있다. |
+  | methods   | 화면 로직 제어와 관계된 메서드를 제어하는 속성.<br />마우스 클릭 이벤트 처리와 같이 화면의 전반적인 이벤트와 화면 동작과 관련된 로직을 추가할 수 있다. |
+  | created   | 뷰 인스턴스가 생성되자마자 실행할 로직을 정의할 수 있는 속성.<br />뷰 인스턴스 라이프 사이클 부분에서 추가로 설명된다. |
+
+
+
+###### 뷰 인스턴스의 유효 범위
+
+**인스턴스의 유효 범위란**
+
+- 뷰 인스턴스를 생성하면 HTML의 특정 범위 안에서만 옵션 속성들이 적용되어 나타나는 것.
+
+- 지역 컴포넌트와 전역 컴포넌트의 차이점을 이해하기 위해서도 꼭 알아야 하는 개념
+
+- 인스턴의 유효 범위는 el 속성과 밀접한 관계
+
+- 인스턴스의 유효 범위를 이해하려면 인스턴스가 생성된 후 화면에 어떻게 적용되는지를 알아야 함
+
+- new Vue()로 인스턴스를 생성하고 나서 화면에 인스턴스 옵션 속성을 적용하는 과정은 다음과 같다.
+
+  ![image12](./images/image12.png)
+
+  [^그림 12]: 인스턴스가 화면에 적용되는 과정
+
+  
+
+- 이 과정을 이해하기 위해 Hello Vue.js 샘플 코드의 인스턴스 정의 부분을 자세히 살펴본다.
+
+  ```vue
+  new Vue({
+    el : '#app',
+    data : {
+      message : 'Hello Vue.js!'
+    }
+  });
+  ```
+
+  // 인스턴스 옵션 속성 정의 및 인스턴스 속성
+
+- 먼저 자바스크립트 코드 상에서 인스턴스 옵션 속성 el과 data를 인스턴스에 정의하고 new Vue()로 인스턴스를 생성 -> 브라우저에서 위 샘플 코드를 실행하면 아래와 같이 el 속성에 지정한 화면 요소(돔)에 인스턴스가 부착됨
+
+  ![image13](./images/image13.png)
+
+- el 속성에 인스턴스가 부착되고 나면 인스턴스에 정의한 옵션 객체의 내용(data 속성)이 el 속성에 지정한 화면 요소와 그 이하 레벨의 화면 요소에 적용되어 값이 치환된다.
+
+  <img src="./images/image14.png" alt="image14" style="zoom:75%;" />
+
+- data 속성의 message 값 Hello Vue.js! 가 {{ message }} 와 치환된다.
+
+  ![image15](./images/image15.png)
+
+[^그림 15]: HTML 코드에 인스턴스의 내용이적용되어 최종적으로 값이 치환된 모습
+
+
+
+###### 인스턴스의 유효 범위 확인
+
+만약 인스턴스의 유효 범위를 벗어나면 어떻게 되는지 살펴본다.
+
+```vue
+<div id ="app">
+
+
+</div>
+{{ message }}
+```
+
+이 코드의 실행 결과는 다음과 같다.
+
+![image16](./images/image16.png)
+
+message 속성의 값이 Hello Vue.js! 로 바뀌지 않고 그대로 출력되는 이유는 인스턴스의 유효 범위 때문이다.
+
+```vue
+<div id ="app">
+
+
+</div> <!-- 여기까지가 인스턴스 유효 범위다. -->
+{{ message }}
+```
+
+
+
+위 코드에서 인스턴스의 유효 범위는 el 속성으로 지정한 <div id="app"> 태그 아래에 오는 요소들로 제한된다. 
+
+따라서 <div> 태그 바깥에 있는 {{ message }}는 뷰에서 인식하지 못하기 때문에 Hello Vue.js! 로 바뀌지 않고 {{ message }} 그대로 출력된다.
+
+
+
+###### 뷰 인스턴스 라이프 사이클
+
+인스턴스의 상태에 따라 호출할 수 있는 속성들을 라이프 사이클(life cycle) 속성이라고 한다.
+
+- 라이프 사이클 (life cycle) : 모바일 앱을 비롯해 일반적으로 애플리케이션이 갖고 있는 생명 주기
+
+그리고 각 라이프 사이클 속성에서 실행되는 커스텀 로직을 라이프 사이클 훅(hook)이라고 한다.
+
+- 커스텀 로직 : 개발자가 임의로 작성한 추가 로직
+
+라이프 사이클 속성에는 created, beforeCreate, beforeMount, mounted 등 인스턴스의 생성, 변경, 소멸과 관련하여 총 8개가 있다.
+
+![image17](./images/image17.png)
+
+- 이 그림은 인스턴스가 생성되고 나서 화면에 인스턴스가 부착된 후 소멸되기까지의 전체적인 흐름을 나타낸 뷰 인스턴스 라이프 사이클 다이어그램이다.
+
+- 라이프 사이클 단계를 크게 나누면 인스턴스의 생성, 생성된 인스턴스를 화면에 부착, 화면에 부착된 인스턴스의 내용이 갱신, 인스턴스가 제거되는 소멸의 4단계로 이루어진다.
+
+- 위 그림에서 부착 -> 갱신 구간은 데이터가 변경되는 경우에만 거치게 됨
+- 각 단계 사이에 라이프 사이클 속성 created, mounted, updated 등이 실행된다.
+  - beforeCreate
+    - 인스턴스가 생성되거 나서 가장 처음으로 실행되는 라이프 사이클 단계
+    - 이 단계에서는 data 속성과 methods 속성이 아직 인스턴스에 정의되어 있지 않음
+    - 돔과 같은 화면 요소에도 접근할 수 없음
+  - created
+    - beforeCreate 라이프 사이클 단계 다음에 실행되는 단계
+    - data 속성과 methodes 속성이 정의되었기 때문에 this.data 또는 this.fetchData() 와 같은 로직들을 이용하여 data 속성과 methods 속성에 정의된 값에 접근하여 로직을 실행할 수 있다.
+    - 다만 아직 인스턴스가 화면 요소에 부착되기 전이기 때문에 templete 속성에 정의된 돔 요소로 접근할 수 없다.
+    - data 속성과 methods 속성에 접근할 수 있는 가장 첫 라이프 사이클 단계이자 컴포넌트가 생성되고 나서 실행되는 단계이기 때문에 서버에 데이터를 요청하여 받아오는 로직을 수행하기 좋다.
+  - beforeMount
+    - created 단계 이후 templete 속성에 지정한 마크업 속성을 render( ) 함수로 변환한 후 el 속성에 지정한 화면 요소(돔)에 인스턴스를 부착하기 전 호출되는 단계.
+    - render( ) 함수가 호출되기 직전의 로직을 추가하기 좋다.
+      - render( ) : 자바스크립트로 화면의 돔을 그리는 함수
+  - mounted
+    - el 속성에서 지정한 화면 요소에 인스턴스가 부착되고 나면 호출되는 단계
+    - templete 속성에 정의한 화면 요소(돔)에 접근할 수 있어 화면 요소를 제어하는 로직을 수행하기 좋은 단계
+    - 돔에 인스턴스가 부착되자마자 호출되기 때문에 하위 컴포넌트나 외부 라이브러리에 의해 추가된 화면 요소들이 최종 HTML 코드로 변환되는 시점과 다를 수 있다.
+      - 변환되는 시점이 다를 경우 $nextTick( ) API를 활용하여 HTML 코드로 최종 파싱(변환)될 때까지 기다린 후 돔 제어 로직을 추가한다.
+  - beforeUpdate
+    - el 속성에서 지정한 화면 요소에 인스턴스가 부착되고 나면 인스턴스에 정의한 속성들이 화면에 치환된다.
+    - 치환된 값은 뷰의 반응성(Reactivity)를 제공하기 위해 $swatch 속성으로 감시한다. (이를 데이터 관찰이라 한다.)
+      - 뷰의 반응성 : 뷰의 특징 중 하나로 코드의 변화에 따라 화면이 반사적으로 반응하여 빠르게 화면을 갱신하는 것을 의미
+    - 또한 beforeUpdated는 관찰하고 있는 데이터가 변경되면 가상 돔으로 화면을 다시 그리기 전에 호출되는 단계.
+    - 변경 예정인 새 데이터에 접근할 수 있어 변경 예정 데이터의 값과 관련된 로직을 미리 넣을 수 있다. 만약 여기에 값을 변경하는 로직을 넣더라고 화면이 다시 그려지지는 않는다.
+  - updated
+    - 데이터가 변경되고 나서 가상 돔으로 다시 화면을 그리고 나면 실행되는 단계
+    - 데이터 변경으로 인한 화면 요소 변경까지 완료된 시점으로, 데이터 변경 후 화면 요소 제어와 관련된 로직을 추가하기 좋은 단계
+    - 이 단계에서 데이터 값을 변경하면 무한 루프에 빠질 수 있으므로 값을 변경하려면 computed, watch와 같은 속성을 사용해야 함
+    - 따라서 데이터 값을 갱신하는 로직은 가급적이면 beforeUpdate에 추가하고, updated에서는 변경 데이터의 화면 요소(돔)와 관련된 로직을 추가하는 것이 좋다.
+      - mounted 단계와 마찬가지로 하위 컴포넌트의 화면 요소와 외부 라이브러리에 의해 주입된 요소의 최종 변환 시점이 다를 수 있다.  $nextTick( )을 사용하여 변환이 완료될 때까지 기다렸다 로직을 추가한다.
+  - beforeDestroy
+    - 뷰 인스턴스가 파괴되기 직전에 호출되는 단계
+    - 이 단계에서는 아직 인스턴스에 접근할 수 있다.
+    - 따라서 뷰 인스턴스의 데이터를 삭제하기 좋은 단계
+  - destroyed
+    - 뷰 인스턴스가 파괴되고 나서 호출되는 단계
+    - 뷰 인스턴스에 정의된 모든 속성이 제거되고 하위에 선언한 인스턴스 또한 모두 파괴
+
+
+
+```vue
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Vue Instance Lifecycle</title>
+  </head>
+  <body>
+    <div id="app">
+      {{ message }}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el : '#app',
+        data: {
+          message: 'Hello Vue.js!'
+        },
+        beforeCreate : function() {
+          console.log("beforeCreate");
+        },
+        created : function() {
+          console.log("created");
+        },
+        mounted : function() {
+          console.log("mounted");
+        },
+        updated : function() {
+          console.log("updated");
+        }
+      });
+    </script>
+  </body>
+</html>
+
+```
+
+위 코드는 뷰 시작하기 샘플 코드에서 라이프 사이클의 4개 속성인 beforeCreate, created, mounted, updated를 추가하고 각각 로그를 출력해보는 예제이다.
+
+
+
+![image18](./images/image18.png)
+
+로그를 보면 뷰 라이플 사이클 도해의 흐름대로 beforeCreate, created, mounted가 표시되는 것을 확인할 수 있다. 다만 한가지 의아한 부분은 updated 속성 함수는 호출되지 않았다는 것이다.
+
+그 이유는 updated 라이프 사이클 혹은 뷰 인스턴스에서 데이터 변경이 일어나 화면이 다시 그려졌을 때 호출되는 로직이기 때문이다.
+
+그럼 updated의 앞 단계인 mounted 단계에서 기존에 정의된 data 속성의 message 값을 변경해보자.
+
+```vue
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Vue Instance Lifecycle</title>
+  </head>
+  <body>
+    <div id="app">
+      {{ message }}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el : '#app',
+        data: {
+          message: 'Hello Vue.js!'
+        },
+        beforeCreate : function() {
+          console.log("beforeCreate");
+        },
+        created : function() {
+          console.log("created");
+        },
+        mounted : function() {
+          console.log("mounted");
+          this.message = 'Hello Vue!';
+          <!-- message 값 변경 -->
+        },
+        updated : function() {
+          console.log("updated");
+        }
+      });
+    </script>
+  </body>
+</html>
+```
+
+mounted 단계에서 데이터를 변경했기 때문에 beforeUpdate, updated 단계에서 정의한 로직이 모두 동작한다.
+
+다만 여기서는 updated 단계에만 'updated'라는 로그를 출력하는 커스텀 로직을 정의했기 때문에 beforeUpdate 단계에서는 아무런 동작을 하지 않는다.
+
+일단 message 값이 변경됨에 따라 화면의 내용은 자연스럽게 갱신된 것이라고 이해하고 넘어가자.
+
+코드를 실행하면 다음과 같은 결과 화면이 나타난다.
+
+![image19](./images/image19.png)
+
+아까 보이지 않던 updated 로그가 출력되었다.
+
+그 이유는 message 값이 변경되면서 화면에 표시되는 message 값이 갱신되었고, 이에 따라 updated 속성에 정의한 로직이 실행되었기 때문이다.
+
+여기서 중요한 것은 인스턴스의 데이터가 갱신되면서 라이프 사이클 단계가 beforeUpdate, updated 단계로 진입했다는 점이다.
+
+이처럼 각 인스턴스 라이프 사이클에 맞춰 원하는 로직을 추가하여 원하는 시점에 실행할 수 있다.
+
